@@ -2,6 +2,7 @@ package org.example.simplesearch.index;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,7 +20,8 @@ public class InvertedIndex {
    * @param value The document.
    */
   void addDoc(int id, String value) {
-
+    index.putIfAbsent(value, new HashSet<>());
+    index.get(value).add(id);
   }
 
   /**
@@ -29,6 +31,6 @@ public class InvertedIndex {
    * @return The matching IDs.
    */
   Set<Integer> retrieveHits(String val) {
-    return Collections.emptySet();
+    return index.getOrDefault(val, Collections.emptySet());
   }
 }
