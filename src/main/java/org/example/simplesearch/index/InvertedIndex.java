@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * Inverted index, containing word -> document ID mappings.
  */
-public class InvertedIndex {
+class InvertedIndex {
 
   private final Map<String, Set<Integer>> index = new HashMap<>();
 
