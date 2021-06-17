@@ -84,4 +84,19 @@ class DocumentInvertedIndexTest {
     Set<Integer> res2 = index.retrieveHits("test", "EXAMPLE_2");
     assertEquals(singleton(1), res2);
   }
+
+  @Test
+  void givenNestedObject_whenAttemptedToIndex_notIndexed() {
+    ObjectNode node = mapper.createObjectNode();
+    node.set("test", mapper.createObjectNode()
+        .put("nested_field", "nested_value")
+    );
+
+    DocumentInvertedIndex index = new DocumentInvertedIndex("test_docs");
+    index.addDoc(1, node);
+
+    // This is somewhat awkward to 'query', but an ObjectNode's string representation will look like this.
+    Set<Integer> res = index.retrieveHits("test", "{\"nested_field\":\"nested_value\"}");
+    assertEquals(emptySet(), res);
+  }
 }
