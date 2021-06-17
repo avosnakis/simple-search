@@ -23,7 +23,7 @@ public class DocumentInvertedIndex {
   private final String name;
   private final Map<String, InvertedIndex> indices = new HashMap<>();
 
-  DocumentInvertedIndex(String name) {
+  public DocumentInvertedIndex(String name) {
     this.name = name;
   }
 
@@ -35,7 +35,7 @@ public class DocumentInvertedIndex {
    * @param id       The ID of the document.
    * @param document The document.
    */
-  void addDoc(int id, JsonNode document) {
+  public void addDoc(int id, JsonNode document) {
     if (document.isObject()) {
       ObjectNode objectNode = (ObjectNode) document;
 
