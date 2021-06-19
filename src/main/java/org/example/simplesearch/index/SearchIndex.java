@@ -2,7 +2,9 @@ package org.example.simplesearch.index;
 
 import org.example.simplesearch.search.SearchResult;
 
-import java.util.Collections;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class SearchIndex {
 
@@ -23,6 +25,12 @@ public class SearchIndex {
    * @return The documents matching, as well as related documents.
    */
   public SearchResult findMatchingDocs(String field, String value) {
-    return new SearchResult(Collections.emptySet());
+    Set<Integer> matchingIds = invertedIndex.retrieveHits(field, value);
+    return new SearchResult(
+        matchingIds.stream()
+            .map(store::retrieveDocument)
+            .flatMap(Optional::stream)
+            .collect(Collectors.toSet())
+    );
   }
 }
