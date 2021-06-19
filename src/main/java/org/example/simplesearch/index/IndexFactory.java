@@ -10,7 +10,7 @@ public class IndexFactory {
    * @param file The file to read documents from.
    * @return The search index.
    */
-  static SearchIndex createSearchIndex(File file) {
+  static SearchIndex createSearchIndex(File file) throws InvalidDocumentFileException {
     return new SearchIndex(null, null);
   }
 }
