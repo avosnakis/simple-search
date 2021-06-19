@@ -40,9 +40,14 @@ class IndexFactoryTest {
         Set.of(mapper.createObjectNode().put("_id", 1).put("test", "TEST"))
     ), res1);
 
-    SearchResult res2 = index.findMatchingDocs("test", "TEST");
+    SearchResult res2 = index.findMatchingDocs("another_field", "FIELD_VAL_1");
     assertEquals(new SearchResult(
-        Set.of(mapper.createObjectNode().put("_id", 2).put("another_field", "FIELD_VAL_1"))
+        Set.of(
+            mapper.createObjectNode().put("_id", 2)
+                .set("another_field", mapper.createArrayNode()
+                    .add("FIELD_VAL_1")
+                    .add("FIELD_VAL_2"))
+        )
     ), res2);
   }
 
@@ -63,13 +68,20 @@ class IndexFactoryTest {
   }
 
   @Test
-  void givenFileHasDocWithNestedObject_whenCreatingIndex_succeedsButDoesNotStoreDoc() throws InvalidDocumentFileException {
+  void givenFileHasDocWithNestedObject_whenCreatingIndex_succeeds() throws InvalidDocumentFileException {
     File file = new File(JSON_DIR, "nested_object.json");
 
     SearchIndex index = IndexFactory.createSearchIndex(file, "_id");
     SearchResult res = index.findMatchingDocs("test", "TEST");
 
-    assertEquals(new SearchResult(emptySet()), res);
+    assertEquals(new SearchResult(singleton(
+        mapper.createObjectNode()
+            .put("_id", 1)
+            .put("test", "TEST")
+            .set("nested_field", mapper.createObjectNode()
+                .put("test", "TEST")
+            )
+    )), res);
   }
 
   @Test
