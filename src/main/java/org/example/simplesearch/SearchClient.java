@@ -14,9 +14,11 @@ public class SearchClient {
   private static final Logger LOGGER = LoggerFactory.getLogger(SearchClient.class);
 
   private final Map<String, SearchIndex> indices;
+  private final KeyMappings keyMappings;
 
-  public SearchClient(Map<String, SearchIndex> indices) {
+  public SearchClient(Map<String, SearchIndex> indices, KeyMappings keyMappings) {
     this.indices = indices;
+    this.keyMappings = keyMappings;
   }
 
   SearchResult search(SearchRequest request) {

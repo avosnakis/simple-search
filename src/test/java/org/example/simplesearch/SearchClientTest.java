@@ -27,7 +27,7 @@ class SearchClientTest {
     Map<String, SearchIndex> indices = new HashMap<>();
     indices.put("organisation", IndexFactory.createSearchIndex(new File(JSON_DIR, "single_good.json"), "_id"));
 
-    SearchClient client = new SearchClient(indices);
+    SearchClient client = new SearchClient(indices, new KeyMappings("_id", new HashMap<>()));
 
     SearchResult result = client.search(new SearchRequest("organisation", "_id", "1"));
     assertEquals(new SearchResult(
@@ -40,9 +40,9 @@ class SearchClientTest {
     Map<String, SearchIndex> indices = new HashMap<>();
     indices.put("organisation", IndexFactory.createSearchIndex(new File(JSON_DIR, "empty.json"), "_id"));
 
-    SearchClient client = new SearchClient(indices);
+    SearchClient client = new SearchClient(indices, new KeyMappings("_id", new HashMap<>()));
 
-    SearchResult result = client.search(new SearchRequest("organisation", "_id", "1"));
+    SearchResult result = client.search(new SearchRequest("users", "_id", "1"));
     assertEquals(new SearchResult(emptySet()), result);
   }
 
