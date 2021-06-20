@@ -114,4 +114,4 @@ This is a simple implementation of a search index. It uses a number of inverted 
 searches; the actual data is stored in another index where it can be refered by ID after the actual search is performed,
 just to display the data.
 
-A simple lexer and parser interprets the user's commands.s
+A simple lexer and parser interprets the user's commands. It will attempt to report any syntactic mistakes.
