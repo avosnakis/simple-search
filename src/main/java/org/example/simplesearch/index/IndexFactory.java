@@ -19,7 +19,7 @@ public class IndexFactory {
    * @param file The file to read documents from.
    * @return The search index.
    */
-  static SearchIndex createSearchIndex(File file, String idFieldName) throws InvalidDocumentFileException {
+  public static SearchIndex createSearchIndex(File file, String idFieldName) throws InvalidDocumentFileException {
     JsonNode fileData;
     try {
       fileData = new ObjectMapper().readTree(file);
