@@ -79,7 +79,8 @@ The configuration file must be of the following format:
 ```
 
 The `idField` indicates which field in the input files will be treated as a unique identifier for the purpose of
-querying. This is the same for every file. Any documents without a matching ID field will not be indexed.
+querying. This is the same for every file. Any documents without a matching ID field will not be indexed. This is also
+the field that foreign keys reference.
 
 The `foreignKeys` object allows the user to configure which fields will be treated as foreign keys when looking for
 related documents.
@@ -87,15 +88,18 @@ related documents.
 For example, if there are two files `users.json` and `websites.json`, it can be configured like:
 
 ```
-"foreignKeys": {
-    "users": "user_id",
-    "websites": "website_id"
+{
+    "idField": "_id",
+    "foreignKeys": {
+        "users": "user_id",
+        "websites": "website_id"
+    }
 }
 ```
 
 When searching in the `users` file, the results from the search will be used to search other files for any documents
-that have the field `user_id` and, if any of those documents' `user_id` matches any IDs in the result set, those
-documents will be displayed too as related results.
+that have the field `user_id` and, if any of those documents' `user_id` matches any of the `_id` field in the result
+set, those documents will be displayed too as related results.
 
 The same applies for when searching in the `websites` file; any documents with a matching `website_id`
 will be returned as a related result.
