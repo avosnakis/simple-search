@@ -85,4 +85,19 @@ class SearchLexerTest {
     assertEquals(List.of(new Token(SearchTokenType.UNKNOWN, "="), EOF), tokens);
   }
 
+  @Test
+  void givenEscapedDoubleQuoteInIdentifier_whenLexed_emitsWithDoubleQuote() {
+    SearchLexer lexer = new SearchLexer("\"test\\\"backslash\"");
+    List<Token> tokens = lexer.readTokens();
+
+    assertEquals(List.of(new Token(SearchTokenType.IDENTIFIER, "test\"backslash"), EOF), tokens);
+  }
+
+  @Test
+  void givenTwoEscapedDoubleQuoteInIdentifier_whenLexed_emitsWithDoubleQuote() {
+    SearchLexer lexer = new SearchLexer("\"test\\\"\\\"backslash\"");
+    List<Token> tokens = lexer.readTokens();
+
+    assertEquals(List.of(new Token(SearchTokenType.IDENTIFIER, "test\"\"backslash"), EOF), tokens);
+  }
 }

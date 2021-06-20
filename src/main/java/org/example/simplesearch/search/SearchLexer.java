@@ -11,6 +11,9 @@ import java.util.List;
  */
 public class SearchLexer {
 
+  private static final char BACKSLASH = '\\';
+  private static final char DOUBLE_QUOTE = '\"';
+
   private static final Logger LOGGER = LoggerFactory.getLogger(SearchLexer.class);
 
   private final String source;
@@ -59,7 +62,7 @@ public class SearchLexer {
       case '=':
         tokens.add(new Token(SearchTokenType.EQUALS, "="));
         break;
-      case '\"':
+      case DOUBLE_QUOTE:
         tokens.add(readRawIdentifier());
         break;
       case ' ':
@@ -79,20 +82,43 @@ public class SearchLexer {
     }
   }
 
+  /**
+   * Checks whether we have encountered an unescaped double quote.
+   * A double quote is escaped when it is of the sequence \", without a preceding backslash.
+   * For example, \\" is unescaped.
+   *
+   * @return Whether the lexer has encountered an unescaped double quote.
+   */
+  private boolean unescapedDoubleQuote() {
+    char curr = peek();
+    char prev = peek(-1);
+
+    if (curr == DOUBLE_QUOTE && prev == BACKSLASH) {
+      // We have encountered an escaped double quote sequence.
+      return false;
+    } else {
+      // The previous character was not a backslash, so if the next character is a double quote, it's unescaped.
+      return curr == DOUBLE_QUOTE;
+    }
+  }
+
   private Token readRawIdentifier() {
-    while (peek() != '\"' && peek() != '\0') {
+    while (!unescapedDoubleQuote() && peek() != '\0') {
       advance();
     }
 
     // Extract the literal, taking off the starting double quote.
     String literal = source.substring(start + 1, position);
-    if (peek() != '\"') {
+    if (peek() != DOUBLE_QUOTE) {
       // If the the raw identifier has not terminated with another double quote, emit an unknown.
       return new Token(SearchTokenType.UNKNOWN, literal);
     } else {
       // The next character is a double quote, so consume it and emit the identifier.
       advance();
-      return new Token(SearchTokenType.IDENTIFIER, literal);
+
+      return new Token(SearchTokenType.IDENTIFIER, literal
+          .replaceAll("\\\\\"", "\"") // Replace all \" sequences with "
+      );
     }
   }
 
@@ -113,6 +139,21 @@ public class SearchLexer {
       return '\0';
     } else {
       return source.charAt(position);
+    }
+  }
+
+  /**
+   * Peeks at a character.
+   *
+   * @param offset The offset from the current position to look at a chacter. May be negative.
+   * @return The character at the position.
+   */
+  private char peek(int offset) {
+    int pos = position + offset;
+    if (pos >= source.length() || pos < 0) {
+      return '\0';
+    } else {
+      return source.charAt(pos);
     }
   }
 
