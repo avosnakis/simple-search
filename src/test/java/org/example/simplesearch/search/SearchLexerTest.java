@@ -19,7 +19,7 @@ class SearchLexerTest {
     SearchLexer lexer = new SearchLexer("TEST");
     List<Token> tokens = lexer.readTokens();
 
-    assertEquals(singletonList(new Token(SearchTokenType.IDENTIFIER, "TEST")), tokens);
+    assertEquals(List.of(new Token(SearchTokenType.IDENTIFIER, "TEST"), EOF), tokens);
   }
 
   @Test

@@ -60,9 +60,33 @@ public class SearchLexer {
         tokens.add(new Token(SearchTokenType.EQUALS, "="));
         break;
       default:
-        // It is an unknown character, we will emit it as an unknown token to report the error.
-        tokens.add(new Token(SearchTokenType.UNKNOWN, Character.toString(curr)));
+        if (Character.isLetterOrDigit(curr)) {
+          tokens.add(readAlphaNumericIdentifier());
+        } else {
+          // It is an unknown character, we will emit it as an unknown token to report the error.
+          tokens.add(new Token(SearchTokenType.UNKNOWN, Character.toString(curr)));
+        }
         break;
+    }
+  }
+
+  private Token readAlphaNumericIdentifier() {
+    while (Character.isLetterOrDigit(peek())) {
+      advance();
+    }
+
+    String literal = source.substring(start, position);
+    return new Token(SearchTokenType.IDENTIFIER, literal);
+  }
+
+  /**
+   * @return The next char, without updating the position. Returns a null byte if at the end.
+   */
+  private char peek() {
+    if (finished()) {
+      return '\0';
+    } else {
+      return source.charAt(position);
     }
   }
 
