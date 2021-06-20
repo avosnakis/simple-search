@@ -59,6 +59,9 @@ public class SearchLexer {
       case '=':
         tokens.add(new Token(SearchTokenType.EQUALS, "="));
         break;
+      case '\"':
+        tokens.add(readRawIdentifier());
+        break;
       default:
         if (Character.isLetterOrDigit(curr)) {
           tokens.add(readAlphaNumericIdentifier());
@@ -67,6 +70,23 @@ public class SearchLexer {
           tokens.add(new Token(SearchTokenType.UNKNOWN, Character.toString(curr)));
         }
         break;
+    }
+  }
+
+  private Token readRawIdentifier() {
+    while (peek() != '\"' && peek() != '\0') {
+      advance();
+    }
+
+    // Extract the literal, taking off the starting double quote.
+    String literal = source.substring(start + 1, position);
+    if (peek() != '\"') {
+      // If the the raw identifier has not terminated with another double quote, emit an unknown.
+      return new Token(SearchTokenType.UNKNOWN, literal);
+    } else {
+      // The next character is a double quote, so consume it and emit the identifier.
+      advance();
+      return new Token(SearchTokenType.IDENTIFIER, literal);
     }
   }
 

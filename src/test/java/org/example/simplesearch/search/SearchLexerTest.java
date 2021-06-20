@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SearchLexerTest {
@@ -70,5 +69,20 @@ class SearchLexerTest {
     assertEquals(List.of(new Token(SearchTokenType.IDENTIFIER, "_id"), EOF), tokens);
   }
 
+  @Test
+  void givenDoubleQuoteAtStart_whenReadingEquals_lexesAsWordUntilNextDoubleQuote() {
+    SearchLexer lexer = new SearchLexer("\"=\"");
+    List<Token> tokens = lexer.readTokens();
+
+    assertEquals(List.of(new Token(SearchTokenType.IDENTIFIER, "="), EOF), tokens);
+  }
+
+  @Test
+  void givenDoubleQuoteAtStart_whenNoTerminatingDoubleQuote_EmitsUnknown() {
+    SearchLexer lexer = new SearchLexer("\"=");
+    List<Token> tokens = lexer.readTokens();
+
+    assertEquals(List.of(new Token(SearchTokenType.UNKNOWN, "="), EOF), tokens);
+  }
 
 }
