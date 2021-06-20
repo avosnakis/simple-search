@@ -19,6 +19,18 @@ public class SearchRequest {
     this.query = query;
   }
 
+  public String getIndexName() {
+    return indexName;
+  }
+
+  public String getField() {
+    return field;
+  }
+
+  public String getQuery() {
+    return query;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

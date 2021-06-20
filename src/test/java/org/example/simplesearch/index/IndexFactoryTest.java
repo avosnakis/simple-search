@@ -27,6 +27,12 @@ class IndexFactoryTest {
     assertEquals(new SearchResult(
         singleton(mapper.createObjectNode().put("_id", 1).put("test", "TEST"))
     ), result);
+
+    SearchResult secondResult = index.findMatchingDocs("_id", "1");
+
+    assertEquals(new SearchResult(
+        singleton(mapper.createObjectNode().put("_id", 1).put("test", "TEST"))
+    ), secondResult);
   }
 
   @Test

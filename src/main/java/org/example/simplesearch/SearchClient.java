@@ -20,6 +20,12 @@ public class SearchClient {
   }
 
   SearchResult search(SearchRequest request) {
-    return new SearchResult(Collections.emptySet());
+    SearchIndex searchIndex = indices.get(request.getIndexName());
+    if (searchIndex == null) {
+      LOGGER.warn("Failed to find index {}.", request.getIndexName());
+      return new SearchResult(Collections.emptySet());
+    }
+
+    return searchIndex.findMatchingDocs(request.getField(), request.getQuery());
   }
 }

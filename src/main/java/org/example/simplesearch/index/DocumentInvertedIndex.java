@@ -70,7 +70,7 @@ public class DocumentInvertedIndex {
     if (field.isValueNode()) {
       ValueNode value = (ValueNode) field;
       indices.putIfAbsent(fieldName, new InvertedIndex());
-      indices.get(fieldName).addDoc(id, value.textValue());
+      indices.get(fieldName).addDoc(id, value.asText());
     } else {
       LOGGER.warn("INDEX {}: Failed to index field {} for document {}. " +
           "This field will be stored but will not be matched in any searches.", this.name, fieldName, id);
