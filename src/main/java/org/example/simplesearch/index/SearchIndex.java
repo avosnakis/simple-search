@@ -12,10 +12,12 @@ import java.util.stream.Collectors;
  */
 public class SearchIndex {
 
+  private final String name;
   private final DocumentStore store;
   private final DocumentInvertedIndex invertedIndex;
 
-  SearchIndex(DocumentStore store, DocumentInvertedIndex invertedIndex) {
+  SearchIndex(String name, DocumentStore store, DocumentInvertedIndex invertedIndex) {
+    this.name = name;
     this.store = store;
     this.invertedIndex = invertedIndex;
   }

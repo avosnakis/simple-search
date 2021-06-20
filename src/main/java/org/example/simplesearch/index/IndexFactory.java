@@ -33,7 +33,8 @@ public class IndexFactory {
 
     ArrayNode documentArray = (ArrayNode) fileData;
 
-    String name = file.getName();
+    // The name of an index will simply be the name of the file without the file extension.
+    String name = indexName(file.getName());
     DocumentStore store = new DocumentStore(name);
     DocumentInvertedIndex invertedIndex = new DocumentInvertedIndex(name);
     for (JsonNode document : documentArray) {
@@ -49,6 +50,14 @@ public class IndexFactory {
       }
     }
 
-    return new SearchIndex(store, invertedIndex);
+    return new SearchIndex(name, store, invertedIndex);
+  }
+
+  private static String indexName(String filename) {
+    if (filename.contains(".")) {
+      return filename.substring(0, filename.lastIndexOf('.'));
+    } else {
+      return filename;
+    }
   }
 }
