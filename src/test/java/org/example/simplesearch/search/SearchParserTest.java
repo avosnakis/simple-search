@@ -1,8 +1,5 @@
 package org.example.simplesearch.search;
 
-import org.example.simplesearch.search.commands.FieldNode;
-import org.example.simplesearch.search.commands.IndexNameNode;
-import org.example.simplesearch.search.commands.QueryNode;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,7 +13,7 @@ class SearchParserTest {
     SearchRequest request = parser.parse();
 
     assertEquals(
-        new SearchRequest(new IndexNameNode("organisation"), new FieldNode("test"), new QueryNode("TEST")),
+        new SearchRequest("organisation", "test", "TEST"),
         request
     );
   }

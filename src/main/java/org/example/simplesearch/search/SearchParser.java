@@ -1,9 +1,5 @@
 package org.example.simplesearch.search;
 
-import org.example.simplesearch.search.commands.FieldNode;
-import org.example.simplesearch.search.commands.IndexNameNode;
-import org.example.simplesearch.search.commands.QueryNode;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -38,10 +34,7 @@ public class SearchParser {
       validateSyntax(indexName, dot, fieldName, equals, query, end);
 
       // The syntax is now confirmed to be valid, we can now build the search request.
-      IndexNameNode indexNameNode = new IndexNameNode(indexName.getLiteral());
-      FieldNode fieldNode = new FieldNode(fieldName.getLiteral());
-      QueryNode queryNode = new QueryNode(query.getLiteral());
-      return new SearchRequest(indexNameNode, fieldNode, queryNode);
+      return new SearchRequest(indexName.getLiteral(), fieldName.getLiteral(), query.getLiteral());
     } catch (NoSuchElementException e) {
       throw new InvalidSearchSyntax("Failed to parse query. Query must be of form: NAME.FIELD=QUERY");
     }
