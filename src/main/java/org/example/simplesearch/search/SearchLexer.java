@@ -62,6 +62,12 @@ public class SearchLexer {
       case '\"':
         tokens.add(readRawIdentifier());
         break;
+      case ' ':
+      case '\n':
+      case '\r':
+      case '\t':
+        // Whitespace can be ignored.
+        break;
       default:
         if (Character.isLetterOrDigit(curr)) {
           tokens.add(readAlphaNumericIdentifier());
