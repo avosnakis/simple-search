@@ -1,0 +1,9 @@
+{
+  "idField": "_id",
+  "foreignKeys": {
+    "users": [
+      "assignee_id",
+      "submitter_id"
+    ]
+  }
+}

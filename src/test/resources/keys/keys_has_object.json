@@ -1,0 +1,6 @@
+{
+  "idField": "_id",
+  "foreignKeys": {
+    "organizations": {}
+  }
+}

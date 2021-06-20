@@ -1,0 +1,8 @@
+{
+  "idField": "_id",
+  "foreignKeys": {
+    "users": [
+      {}
+    ]
+  }
+}
