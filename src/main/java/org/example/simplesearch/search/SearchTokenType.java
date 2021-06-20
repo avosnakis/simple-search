@@ -7,7 +7,7 @@ public enum SearchTokenType {
 
   DOT,
   EQUALS,
-  DOUBLE_QUOTE,
   IDENTIFIER,
-  EOF
+  EOF,
+  UNKNOWN
 }
