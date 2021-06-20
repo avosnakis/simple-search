@@ -30,12 +30,15 @@ public class SearchIndex {
    * @param value The value.
    * @return The documents matching, as well as related documents.
    */
-  public SearchResult findMatchingDocs(String field, String value) {
-    Set<Integer> matchingIds = invertedIndex.retrieveHits(field, value);
-    Set<JsonNode> documents = matchingIds.stream()
+  public Set<JsonNode> findMatchingDocs(String field, String value) {
+    Set<String> matchingIds = invertedIndex.retrieveHits(field, value);
+    return matchingIds.stream()
         .map(store::retrieveDocument)
         .flatMap(Optional::stream)
         .collect(Collectors.toSet());
-    return new SearchResult(documents);
+  }
+
+  public String getName() {
+    return name;
   }
 }

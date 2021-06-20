@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.NumericNode;
+import com.fasterxml.jackson.databind.node.ValueNode;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,9 +42,9 @@ public class IndexFactory {
       JsonNode idField = document.path(idFieldName);
 
       // As long as there is a valid ID field, we will try to index it.
-      if (idField.isNumber()) {
-        NumericNode idNum = (NumericNode) idField;
-        int id = idNum.asInt();
+      if (idField.isValueNode()) {
+        ValueNode idVal = (ValueNode) idField;
+        String id = idVal.asText();
 
         store.storeDocument(id, document);
         invertedIndex.addDoc(id, document);

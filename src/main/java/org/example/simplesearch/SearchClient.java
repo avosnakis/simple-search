@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Interface for conducting searches.
@@ -33,14 +34,20 @@ public class SearchClient {
    * @param request The search request.
    * @return The search result.
    */
-  SearchResult search(SearchRequest request) {
+  SearchResult search(SearchRequest request, String idField) {
     SearchIndex searchIndex = indices.get(request.getIndexName());
     if (searchIndex == null) {
       LOGGER.warn("Failed to find index {}.", request.getIndexName());
-      return new SearchResult(Collections.emptySet());
+      return new SearchResult(Collections.emptySet(), Collections.emptySet());
     }
 
-    return searchIndex.findMatchingDocs(request.getField(), request.getQuery());
+    Set<JsonNode> primaryResults = searchIndex.findMatchingDocs(request.getField(), request.getQuery());
+    Set<String> ids = primaryResults.stream()
+        .map(jsonNode -> jsonNode.path(idField))
+        .map(JsonNode::asText)
+        .collect(Collectors.toSet());
+    Set<JsonNode> relatedResults = findRelatedDocuments(request.getIndexName(), ids);
+    return new SearchResult(primaryResults, relatedResults);
   }
 
   /**
@@ -50,7 +57,7 @@ public class SearchClient {
    * @param originalIds   The original list of IDs that was returned.
    * @return Documents with one of the original IDs in one of the original indice's foreign keys.
    */
-  SearchResult findRelatedDocuments(String originalIndex, Set<Integer> originalIds) {
+  Set<JsonNode> findRelatedDocuments(String originalIndex, Set<String> originalIds) {
     Set<String> foreignKeys = keyMappings.retrieveKeysFor(originalIndex);
     Set<JsonNode> relatedDocuments = new HashSet<>();
 
@@ -60,13 +67,13 @@ public class SearchClient {
       // need to do this for each foreign key.
       for (String foreignKey : foreignKeys) {
         // and for each ID...
-        for (int id : originalIds) {
-          SearchResult related = index.findMatchingDocs(foreignKey, Integer.toString(id));
-          relatedDocuments.addAll(related.getPrimaryResults());
+        for (String id : originalIds) {
+          Set<JsonNode> related = index.findMatchingDocs(foreignKey, id);
+          relatedDocuments.addAll(related);
         }
       }
     }
 
-    return new SearchResult(relatedDocuments);
+    return relatedDocuments;
   }
 }

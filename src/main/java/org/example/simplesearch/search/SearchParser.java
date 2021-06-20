@@ -20,7 +20,7 @@ public class SearchParser {
    * @return The full search request.
    * @throws InvalidSearchSyntax In case the syntax is invalid.
    */
-  SearchRequest parse() throws InvalidSearchSyntax {
+  public SearchRequest parse() throws InvalidSearchSyntax {
     List<Token> tokens = lexer.readTokens();
     Iterator<Token> tokenIterator = tokens.iterator();
 

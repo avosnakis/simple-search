@@ -1,5 +1,6 @@
 package org.example.simplesearch;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.simplesearch.index.IndexFactory;
 import org.example.simplesearch.index.InvalidDocumentFileException;
@@ -30,9 +31,10 @@ class SearchClientTest {
 
     SearchClient client = new SearchClient(indices, new KeyMappings("_id", new HashMap<>()));
 
-    SearchResult result = client.search(new SearchRequest("organisation", "_id", "1"));
+    SearchResult result = client.search(new SearchRequest("organisation", "_id", "1"), "_id");
     assertEquals(new SearchResult(
-        singleton(mapper.createObjectNode().put("_id", 1).put("test", "TEST"))
+        singleton(mapper.createObjectNode().put("_id", 1).put("test", "TEST")),
+        emptySet()
     ), result);
   }
 
@@ -43,8 +45,8 @@ class SearchClientTest {
 
     SearchClient client = new SearchClient(indices, new KeyMappings("_id", new HashMap<>()));
 
-    SearchResult result = client.search(new SearchRequest("users", "_id", "1"));
-    assertEquals(new SearchResult(emptySet()), result);
+    SearchResult result = client.search(new SearchRequest("users", "_id", "1"), "_id");
+    assertEquals(new SearchResult(emptySet(), emptySet()), result);
   }
 
   @Test
@@ -57,10 +59,8 @@ class SearchClientTest {
 
     SearchClient client = new SearchClient(indices, keyMappings);
 
-    SearchResult result = client.findRelatedDocuments("single_good", Set.of(1));
+    Set<JsonNode> result = client.findRelatedDocuments("single_good", Set.of("1"));
     assertEquals(
-        new SearchResult(
-            singleton(mapper.createObjectNode().put("_id", 1).put("single_good_id", 1))
-        ), result);
+        singleton(mapper.createObjectNode().put("_id", 1).put("single_good_id", 1)), result);
   }
 }

@@ -13,7 +13,7 @@ public class DocumentStore {
 
   private final String name;
 
-  private final Map<Integer, JsonNode> store = new HashMap<>();
+  private final Map<String, JsonNode> store = new HashMap<>();
 
   DocumentStore(String name) {
     this.name = name;
@@ -25,7 +25,7 @@ public class DocumentStore {
    * @param id The ID of the document to retrieve.
    * @return The document if the ID exists, otherwise nothing.
    */
-  Optional<JsonNode> retrieveDocument(int id) {
+  Optional<JsonNode> retrieveDocument(String id) {
     return Optional.ofNullable(store.get(id));
   }
 
@@ -35,7 +35,7 @@ public class DocumentStore {
    * @param id The ID of the document to store.
    * @param document The document to store.
    */
-  void storeDocument(int id, JsonNode document) {
+  void storeDocument(String id, JsonNode document) {
     store.put(id, document);
   }
 }

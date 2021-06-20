@@ -20,10 +20,10 @@ class DocumentStoreTest {
         .put("test", "test");
 
     DocumentStore documentStore = new DocumentStore("TEST");
-    documentStore.storeDocument(1, jsonNode);
+    documentStore.storeDocument("1", jsonNode);
 
-    assertEquals(Optional.of(jsonNode), documentStore.retrieveDocument(1));
-    assertEquals(Optional.empty(), documentStore.retrieveDocument(2));
+    assertEquals(Optional.of(jsonNode), documentStore.retrieveDocument("1"));
+    assertEquals(Optional.empty(), documentStore.retrieveDocument("2"));
   }
 
   @Test
@@ -33,14 +33,14 @@ class DocumentStoreTest {
         .put("test", "test");
 
     DocumentStore documentStore = new DocumentStore("TEST");
-    documentStore.storeDocument(1, originalDoc);
+    documentStore.storeDocument("1", originalDoc);
 
     JsonNode newDoc = mapper.createObjectNode()
         .put("_id", 1)
         .put("test", "new_est");
 
-    documentStore.storeDocument(1, newDoc);
+    documentStore.storeDocument("1", newDoc);
 
-    assertEquals(Optional.of(newDoc), documentStore.retrieveDocument(1));
+    assertEquals(Optional.of(newDoc), documentStore.retrieveDocument("1"));
   }
 }

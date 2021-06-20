@@ -20,10 +20,10 @@ class DocumentInvertedIndexTest {
     node.put("test", "EXAMPLE");
 
     DocumentInvertedIndex index = new DocumentInvertedIndex("test_docs");
-    index.addDoc(1, node);
+    index.addDoc("1", node);
 
-    Set<Integer> res = index.retrieveHits("test", "EXAMPLE");
-    assertEquals(singleton(1), res);
+    Set<String> res = index.retrieveHits("test", "EXAMPLE");
+    assertEquals(singleton("1"), res);
   }
 
   @Test
@@ -36,11 +36,11 @@ class DocumentInvertedIndexTest {
     ObjectNode secondNode = mapper.createObjectNode();
     secondNode.put("test", "EXAMPLE");
 
-    index.addDoc(1, firstNode);
-    index.addDoc(2, secondNode);
+    index.addDoc("1", firstNode);
+    index.addDoc("2", secondNode);
 
-    Set<Integer> res = index.retrieveHits("test", "EXAMPLE");
-    assertEquals(Set.of(1, 2), res);
+    Set<String> res = index.retrieveHits("test", "EXAMPLE");
+    assertEquals(Set.of("1", "2"), res);
   }
 
   @Test
@@ -49,9 +49,9 @@ class DocumentInvertedIndexTest {
     node.put("test", "EXAMPLE");
 
     DocumentInvertedIndex index = new DocumentInvertedIndex("test_docs");
-    index.addDoc(1, node);
+    index.addDoc("1", node);
 
-    Set<Integer> res = index.retrieveHits("test", "NOT_THE_VALUE");
+    Set<String> res = index.retrieveHits("test", "NOT_THE_VALUE");
     assertEquals(emptySet(), res);
   }
 
@@ -61,9 +61,9 @@ class DocumentInvertedIndexTest {
     node.put("test", "EXAMPLE");
 
     DocumentInvertedIndex index = new DocumentInvertedIndex("test_docs");
-    index.addDoc(1, node);
+    index.addDoc("1", node);
 
-    Set<Integer> res = index.retrieveHits("not_a_real_field", "NOT_THE_VALUE");
+    Set<String> res = index.retrieveHits("not_a_real_field", "NOT_THE_VALUE");
     assertEquals(emptySet(), res);
   }
 
@@ -76,13 +76,13 @@ class DocumentInvertedIndexTest {
     );
 
     DocumentInvertedIndex index = new DocumentInvertedIndex("test_docs");
-    index.addDoc(1, node);
+    index.addDoc("1", node);
 
-    Set<Integer> res = index.retrieveHits("test", "EXAMPLE_1");
-    assertEquals(singleton(1), res);
+    Set<String> res = index.retrieveHits("test", "EXAMPLE_1");
+    assertEquals(singleton("1"), res);
 
-    Set<Integer> res2 = index.retrieveHits("test", "EXAMPLE_2");
-    assertEquals(singleton(1), res2);
+    Set<String> res2 = index.retrieveHits("test", "EXAMPLE_2");
+    assertEquals(singleton("1"), res2);
   }
 
   @Test
@@ -93,10 +93,10 @@ class DocumentInvertedIndexTest {
     );
 
     DocumentInvertedIndex index = new DocumentInvertedIndex("test_docs");
-    index.addDoc(1, node);
+    index.addDoc("1", node);
 
     // This is somewhat awkward to 'query', but an ObjectNode's string representation will look like this.
-    Set<Integer> res = index.retrieveHits("test", "{\"nested_field\":\"nested_value\"}");
+    Set<String> res = index.retrieveHits("test", "{\"nested_field\":\"nested_value\"}");
     assertEquals(emptySet(), res);
   }
 }

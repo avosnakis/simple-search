@@ -35,7 +35,7 @@ public class DocumentInvertedIndex {
    * @param id       The ID of the document.
    * @param document The document.
    */
-  public void addDoc(int id, JsonNode document) {
+  public void addDoc(String id, JsonNode document) {
     if (document.isObject()) {
       ObjectNode objectNode = (ObjectNode) document;
 
@@ -47,7 +47,7 @@ public class DocumentInvertedIndex {
     }
   }
 
-  private void indexField(int id, String fieldName, JsonNode field) {
+  private void indexField(String id, String fieldName, JsonNode field) {
     if (field.isArray()) {
       ArrayNode arrayNode = (ArrayNode) field;
       for (JsonNode value : arrayNode) {
@@ -66,7 +66,7 @@ public class DocumentInvertedIndex {
    * @param fieldName The name of the field.
    * @param field     The field value itself.
    */
-  private void insertValue(int id, String fieldName, JsonNode field) {
+  private void insertValue(String id, String fieldName, JsonNode field) {
     if (field.isValueNode()) {
       ValueNode value = (ValueNode) field;
       indices.putIfAbsent(fieldName, new InvertedIndex());
@@ -84,7 +84,7 @@ public class DocumentInvertedIndex {
    * @param value The value to search.
    * @return The matching IDs.
    */
-  Set<Integer> retrieveHits(String field, String value) {
+  Set<String> retrieveHits(String field, String value) {
     InvertedIndex index = indices.get(field);
     if (index == null) {
       return Collections.emptySet();

@@ -11,7 +11,7 @@ import java.util.Set;
  */
 class InvertedIndex {
 
-  private final Map<String, Set<Integer>> index = new HashMap<>();
+  private final Map<String, Set<String>> index = new HashMap<>();
 
   /**
    * Adds a doc to the index, storing its ID against its field values.
@@ -19,7 +19,7 @@ class InvertedIndex {
    * @param id    The ID of the document.
    * @param value The document.
    */
-  void addDoc(int id, String value) {
+  void addDoc(String id, String value) {
     index.putIfAbsent(value, new HashSet<>());
     index.get(value).add(id);
   }
@@ -30,7 +30,7 @@ class InvertedIndex {
    * @param val The value to search.
    * @return The matching IDs.
    */
-  Set<Integer> retrieveHits(String val) {
+  Set<String> retrieveHits(String val) {
     return index.getOrDefault(val, Collections.emptySet());
   }
 }
