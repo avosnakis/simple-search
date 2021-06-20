@@ -29,4 +29,11 @@ public class QueryNode implements SearchNode {
   public int hashCode() {
     return Objects.hash(query);
   }
+
+  @Override
+  public String toString() {
+    return "QueryNode{" +
+        "query='" + query + '\'' +
+        '}';
+  }
 }

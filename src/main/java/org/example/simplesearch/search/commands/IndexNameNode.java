@@ -29,4 +29,11 @@ public class IndexNameNode implements SearchNode {
   public int hashCode() {
     return Objects.hash(indexName);
   }
+
+  @Override
+  public String toString() {
+    return "IndexNameNode{" +
+        "indexName='" + indexName + '\'' +
+        '}';
+  }
 }

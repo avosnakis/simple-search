@@ -23,28 +23,35 @@ class SearchParserTest {
 
   @Test
   void givenQueryMissingIdentifier_whenParsed_throwsException() {
-    SearchParser parser = new SearchParser(".test=TEST");
+    SearchParser parser = new SearchParser("..test=TEST");
 
     assertThrows(InvalidSearchSyntax.class, parser::parse);
   }
 
   @Test
   void givenQueryMissingDot_whenParsed_throwsException() {
-    SearchParser parser = new SearchParser("organisation test=TEST");
+    SearchParser parser = new SearchParser("organisation=test=TEST");
+
+    assertThrows(InvalidSearchSyntax.class, parser::parse);
+  }
+
+  @Test
+  void givenQuerySecondIdentifierDot_whenParsed_throwsException() {
+    SearchParser parser = new SearchParser("organisation..=TEST");
 
     assertThrows(InvalidSearchSyntax.class, parser::parse);
   }
 
   @Test
   void givenQueryMissingEquals_whenParsed_throwsException() {
-    SearchParser parser = new SearchParser("organisation.test TEST");
+    SearchParser parser = new SearchParser("organisation.test.TEST");
 
     assertThrows(InvalidSearchSyntax.class, parser::parse);
   }
 
   @Test
   void givenQueryMissingFieldVal_whenParsed_throwsException() {
-    SearchParser parser = new SearchParser("organisation.test=");
+    SearchParser parser = new SearchParser("organisation.test=.");
 
     assertThrows(InvalidSearchSyntax.class, parser::parse);
   }
@@ -55,4 +62,19 @@ class SearchParserTest {
 
     assertThrows(InvalidSearchSyntax.class, parser::parse);
   }
+
+  @Test
+  void givenQueryHasNotEnoughTokens_whenParsed_throwsException() {
+    SearchParser parser = new SearchParser("organisation test=TEST");
+
+    assertThrows(InvalidSearchSyntax.class, parser::parse);
+  }
+
+  @Test
+  void givenQueryHasExtraTokens_whenParsed_throwsException() {
+    SearchParser parser = new SearchParser("organisation.test=TEST.");
+
+    assertThrows(InvalidSearchSyntax.class, parser::parse);
+  }
+
 }

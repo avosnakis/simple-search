@@ -29,4 +29,11 @@ public class FieldNode implements SearchNode {
   public int hashCode() {
     return Objects.hash(field);
   }
+
+  @Override
+  public String toString() {
+    return "FieldNode{" +
+        "field='" + field + '\'' +
+        '}';
+  }
 }

@@ -16,6 +16,14 @@ public class Token {
     this.literal = literal;
   }
 
+  public SearchTokenType getTokenType() {
+    return tokenType;
+  }
+
+  public String getLiteral() {
+    return literal;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
