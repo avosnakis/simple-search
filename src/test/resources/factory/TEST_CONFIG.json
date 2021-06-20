@@ -1,0 +1,6 @@
+{
+  "idField": "_id",
+  "foreignKeys": {
+    "single_good": "single_good_id"
+  }
+}

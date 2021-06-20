@@ -23,7 +23,7 @@ class SearchIndexTest {
     DocumentInvertedIndex invertedIndex = new DocumentInvertedIndex("TEST");
     invertedIndex.addDoc(1, node);
 
-    SearchIndex searchIndex = new SearchIndex(store, invertedIndex);
+    SearchIndex searchIndex = new SearchIndex("test", store, invertedIndex);
 
     SearchResult searchResult = searchIndex.findMatchingDocs("TEST_FIELD", "test");
     assertEquals(new SearchResult(Set.of(node)), searchResult);
@@ -44,7 +44,7 @@ class SearchIndexTest {
     invertedIndex.addDoc(1, firstNode);
     invertedIndex.addDoc(2, secondNode);
 
-    SearchIndex searchIndex = new SearchIndex(store, invertedIndex);
+    SearchIndex searchIndex = new SearchIndex("test", store, invertedIndex);
 
     SearchResult searchResult = searchIndex.findMatchingDocs("TEST_FIELD", "test");
     assertEquals(new SearchResult(Set.of(firstNode, secondNode)), searchResult);
@@ -66,7 +66,7 @@ class SearchIndexTest {
     invertedIndex.addDoc(1, firstNode);
     invertedIndex.addDoc(2, secondNode);
 
-    SearchIndex searchIndex = new SearchIndex(store, invertedIndex);
+    SearchIndex searchIndex = new SearchIndex("test", store, invertedIndex);
 
     SearchResult searchResult = searchIndex.findMatchingDocs("TEST_FIELD", "test");
     assertEquals(new SearchResult(Set.of(firstNode)), searchResult);
