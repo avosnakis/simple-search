@@ -71,6 +71,8 @@ public class SimpleSearchCLI {
       SearchParser parser = new SearchParser(input);
       try {
         SearchRequest request = parser.parse();
+        printQuery(request);
+
         SearchResult result = searchClient.search(request, mappings.getIdField());
         result.print(printStream);
       } catch (InvalidSearchSyntax e) {
@@ -81,6 +83,14 @@ public class SimpleSearchCLI {
     }
 
     printStream.println("Exiting simple search engine."); // This somehow never get printed.
+  }
+
+  private void printQuery(SearchRequest searchRequest) {
+    printStream.printf("Searching %s: %s = %s%n",
+        searchRequest.getIndexName(),
+        searchRequest.getField(),
+        searchRequest.getQuery()
+    );
   }
 
   private KeyMappings fromConfigFile(String configFilePath) throws IOException, InvalidConfigurationException {

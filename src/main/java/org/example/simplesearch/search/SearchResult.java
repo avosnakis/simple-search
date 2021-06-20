@@ -42,18 +42,19 @@ public class SearchResult {
    * @param printStream The stream to print to.
    */
   public void print(PrintStream printStream) {
-    printResults(primaryResults, printStream, "Matching documents:", "No matching documents.");
-    printResults(relatedResults, printStream, "Related documents:", "No related documents.");
+    printResults(primaryResults, printStream, "matching");
+    printResults(relatedResults, printStream, "related");
   }
 
-  private static void printResults(Set<JsonNode> results, PrintStream printStream, String message, String zeroMessage) {
+  private static void printResults(Set<JsonNode> results, PrintStream printStream, String desc) {
     if (results.size() > 0) {
-      printStream.println(message);
+      String message = desc + " document" + (results.size() == 1 ? "" : "s") + ".";
+      printStream.printf("%d %s%n", results.size(), message);
       results.stream()
           .map(JsonNode::toPrettyString)
           .forEach(printStream::println);
     } else {
-      printStream.println(zeroMessage);
+      printStream.printf("No %s documents.%n", desc);
     }
   }
 }

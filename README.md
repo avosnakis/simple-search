@@ -31,7 +31,7 @@ with the following syntax:
 `index.field=value`
 
 index, field, and value are alphanumeric sequences. The index is the name of the file (without the file extension) to be
-searched. The field is the actual fied th at will be search. The value is the value that must be matched.
+searched. The field is the actual field that will be searched. The value is the value that must be matched.
 
 They can contain any character (except double quotes) when surrounded by double quotes, for example:
 
@@ -39,13 +39,25 @@ They can contain any character (except double quotes) when surrounded by double 
 
 This query will search the `users` file (users.json) for any documents with the field `_id` with the value 1.
 
-Note that escaping double quotes inside a double quotes is not support.
+Double quotes can be entered within other double quotes and treated as regular characters by inputting the following
+sequence: `\"`. This is supported in identifiers that are surrounded by double quotes. For example:
 
-The following are both valid queries:
+`users.description="\"lorem\" ipsum"`
+
+This means that the search query used will be `"lorem" ipsum`.
+
+For a more confusing example, the following query:
+
+`users.description="\\"lorem\\" ipsum"`
+
+Will result in `\"lorem\" ipsum`, and so on.
+
+The following are all valid queries:
 
 ```
 "users".locale="en-AU"
 "tickets"."status"=closed
+tickets.description="dolores \"sit\" amet"
 ```
 
 The REPL can be ended by issuing the `exit` command instead of a query.
@@ -88,10 +100,18 @@ documents will be displayed too as related results.
 The same applies for when searching in the `websites` file; any documents with a matching `website_id`
 will be returned as a related result.
 
-Assumptions
+Assumptions and limitations
 ---------
 
 - All data can be reasonably stored in memory. Very large files will not work.
 - Searches cannot be performed on nested objects. Support for this could reasonably be added however.
 - A valid configuration file is necessary. The application will not start without one.
-- Index names, field names, and values cannot contain double quotes. Support for escape sequences however is possible to add.
+- This application can only perform exact match searches.
+
+Design Notes
+--------
+This is a simple implementation of a search index. It uses a number of inverted indices in order to perform quick
+searches; the actual data is stored in another index where it can be refered by ID after the actual search is performed,
+just to display the data.
+
+A simple lexer and parser interprets the user's commands.s

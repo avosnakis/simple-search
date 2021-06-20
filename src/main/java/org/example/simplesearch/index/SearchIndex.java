@@ -1,7 +1,6 @@
 package org.example.simplesearch.index;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.example.simplesearch.search.SearchResult;
 
 import java.util.Optional;
 import java.util.Set;
