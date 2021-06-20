@@ -57,16 +57,16 @@ public class SearchClient {
    * @param originalIds   The original list of IDs that was returned.
    * @return Documents with one of the original IDs in one of the original indice's foreign keys.
    */
-  Set<JsonNode> findRelatedDocuments(String originalIndex, Set<String> originalIds) {
+  private Set<JsonNode> findRelatedDocuments(String originalIndex, Set<String> originalIds) {
     Set<String> foreignKeys = keyMappings.retrieveKeysFor(originalIndex);
     Set<JsonNode> relatedDocuments = new HashSet<>();
 
     // now, look at each index to see if any of them have documents with foreign keys matching any of the original IDs.
     for (SearchIndex index : indices.values()) {
 
-      // need to do this for each foreign key.
+      // Need to do this for each foreign key for this index.
       for (String foreignKey : foreignKeys) {
-        // and for each ID...
+        // And for each ID...
         for (String id : originalIds) {
           Set<JsonNode> related = index.findMatchingDocs(foreignKey, id);
           relatedDocuments.addAll(related);

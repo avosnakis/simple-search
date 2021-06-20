@@ -1,6 +1,5 @@
 package org.example.simplesearch;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.simplesearch.index.IndexFactory;
 import org.example.simplesearch.index.InvalidDocumentFileException;
@@ -12,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
@@ -59,8 +57,11 @@ class SearchClientTest {
 
     SearchClient client = new SearchClient(indices, keyMappings);
 
-    Set<JsonNode> result = client.findRelatedDocuments("single_good", Set.of("1"));
+    SearchResult result = client.search(new SearchRequest("single_good","_id", "1"), "_id");
     assertEquals(
-        singleton(mapper.createObjectNode().put("_id", 1).put("single_good_id", 1)), result);
+        new SearchResult(
+            singleton(mapper.createObjectNode().put("_id", 1).put("test", "TEST")),
+            singleton(mapper.createObjectNode().put("_id", 1).put("single_good_id", 1))
+        ), result);
   }
 }

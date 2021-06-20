@@ -60,7 +60,6 @@ public class SimpleSearchCLI {
     SearchClient searchClient = createSearchClient(args, mappings);
 
     Scanner sc = new Scanner(inputStream);
-
     printStream.print(">>> ");
     while (sc.hasNext()) {
       String input = sc.next();
@@ -69,17 +68,16 @@ public class SimpleSearchCLI {
       }
 
       printStream.println();
-
       SearchParser parser = new SearchParser(input);
-
       try {
         SearchRequest request = parser.parse();
-
         SearchResult result = searchClient.search(request, mappings.getIdField());
         result.print(printStream);
       } catch (InvalidSearchSyntax e) {
         printStream.println(e.getMessage());
       }
+
+      printStream.print(">>> ");
     }
 
     printStream.println("Exiting simple search engine."); // This somehow never get printed.
