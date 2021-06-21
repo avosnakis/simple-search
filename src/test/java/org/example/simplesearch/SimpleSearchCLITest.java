@@ -6,10 +6,12 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SimpleSearchCLITest {
@@ -79,6 +81,32 @@ class SimpleSearchCLITest {
     );
 
     assertTrue(containsStringChunks(outputStream.toString(), "_id", "test"));
+  }
+
+  @Test
+  void givenNoArgs_throwsException() {
+    InputStream inputStream = new ByteArrayInputStream("".getBytes());
+
+    SimpleSearchCLI simpleSearchCLI = new SimpleSearchCLI(printStream, inputStream);
+    assertThrows(InvalidArgumentException.class, simpleSearchCLI::execute);
+  }
+
+  @Test
+  void givenConfigFileDoesNotExist_throwsException() {
+    InputStream inputStream = new ByteArrayInputStream("".getBytes());
+
+    SimpleSearchCLI simpleSearchCLI = new SimpleSearchCLI(printStream, inputStream);
+    assertThrows(FileNotFoundException.class, () -> simpleSearchCLI.execute("not/a/file"));
+  }
+
+  @Test
+  void givenCorrectConf_whenTypingUnknownCommand_printsFeedback() throws Exception {
+    InputStream inputStream = new ByteArrayInputStream("4\n3".getBytes());
+
+    SimpleSearchCLI simpleSearchCLI = new SimpleSearchCLI(printStream, inputStream);
+    simpleSearchCLI.execute("src/test/resources/factory/TEST_CONFIG.json");
+
+    assertTrue(containsStringChunks(outputStream.toString(), "Unknown command."));
   }
 
   private static String integrationFile(String file) {

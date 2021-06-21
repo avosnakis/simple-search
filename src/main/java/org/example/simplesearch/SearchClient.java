@@ -88,4 +88,8 @@ public class SearchClient {
             e -> e.getValue().searchableFields()
         ));
   }
+
+  public Set<String> availableFiles() {
+    return indices.keySet();
+  }
 }
