@@ -25,42 +25,16 @@ objects. This is shown as an example above.
 
 The fields of these objects must not be objects. Such fields will be stored but cannot be searched on.
 
-Once successfully built, the application will present a REPL where the user can make searches. Searching is performed
-with the following syntax:
+Once successfully built, the application will present a REPL where the user can make searches.
 
-`index.field=value`
+The user has three basic commands, `1`, `2`, or `3`.
 
-index, field, and value are alphanumeric sequences. The index is the name of the file (without the file extension) to be
-searched. The field is the actual field that will be searched. The value is the value that must be matched.
+`1` will let the user progress to the search interface, where the user can choose a file to search in, a field to search
+on, and a value to search for, which the user will perform in three stages.
 
-They can contain any character (except double quotes) when surrounded by double quotes, for example:
+`2` displays a list of searchable fields for each file.
 
-`users."_id"=1`
-
-This query will search the `users` file (users.json) for any documents with the field `_id` with the value 1.
-
-Double quotes can be entered within other double quotes and treated as regular characters by inputting the following
-sequence: `\"`. This is supported in identifiers that are surrounded by double quotes. For example:
-
-`users.description="\"lorem\" ipsum"`
-
-This means that the search query used will be `"lorem" ipsum`.
-
-For a more confusing example, the following query:
-
-`users.description="\\"lorem\\" ipsum"`
-
-Will result in `\"lorem\" ipsum`, and so on.
-
-The following are all valid queries:
-
-```
-"users".locale="en-AU"
-"tickets"."status"=closed
-tickets.description="dolores \"sit\" amet"
-```
-
-The REPL can be ended by issuing the `exit` command instead of a query.
+`3` will simply exit the REPL and close the application.
 
 Configuration
 ----------
@@ -115,7 +89,8 @@ Assumptions and limitations
 Design Notes
 --------
 This is a simple implementation of a search index. It uses a number of inverted indices in order to perform quick
-searches; the actual data is stored in another index where it can be refered by ID after the actual search is performed,
-just to display the data.
+searches; the actual data is stored in another index where it can be referred by ID after the actual search is
+performed, just to display the data.
 
-A simple lexer and parser interprets the user's commands. It will attempt to report any syntactic mistakes.
+The configuration file allows the application to have significant flexibility in how the users want their data model to
+be used, as it allowed customisation of the ID field as well as the foreign key references.

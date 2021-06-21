@@ -17,7 +17,7 @@ class SearchIndexTest {
   void givenStoredDocument_whenQueried_thenRetrieved() {
     ObjectNode node = mapper.createObjectNode().put("_id", 1)
         .put("TEST_FIELD", "test");
-    DocumentStore store = new DocumentStore("TEST");
+    DocumentStore store = new DocumentStore();
     store.storeDocument("1", node);
 
     DocumentInvertedIndex invertedIndex = new DocumentInvertedIndex("TEST");
@@ -38,7 +38,7 @@ class SearchIndexTest {
     ObjectNode secondNode = mapper.createObjectNode().put("_id", 2)
         .put("TEST_FIELD", "test");
 
-    DocumentStore store = new DocumentStore("TEST");
+    DocumentStore store = new DocumentStore();
     store.storeDocument("1", firstNode);
     store.storeDocument("2", secondNode);
 
@@ -61,7 +61,7 @@ class SearchIndexTest {
     ObjectNode secondNode = mapper.createObjectNode().put("_id", 2)
         .put("TEST_FIELD", "not_test");
 
-    DocumentStore store = new DocumentStore("TEST");
+    DocumentStore store = new DocumentStore();
     store.storeDocument("1", firstNode);
     store.storeDocument("2", secondNode);
 

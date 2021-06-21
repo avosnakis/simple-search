@@ -3,7 +3,6 @@ package org.example.simplesearch.index;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.NumericNode;
 import com.fasterxml.jackson.databind.node.ValueNode;
 
 import java.io.File;
@@ -36,7 +35,7 @@ public class IndexFactory {
 
     // The name of an index will simply be the name of the file without the file extension.
     String name = indexName(file.getName());
-    DocumentStore store = new DocumentStore(name);
+    DocumentStore store = new DocumentStore();
     DocumentInvertedIndex invertedIndex = new DocumentInvertedIndex(name);
     for (JsonNode document : documentArray) {
       JsonNode idField = document.path(idFieldName);
