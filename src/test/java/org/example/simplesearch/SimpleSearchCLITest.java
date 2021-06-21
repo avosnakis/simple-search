@@ -65,7 +65,6 @@ class SimpleSearchCLITest {
         "33",
         "69"
     };
-    System.out.println(outputStream.toString());
     assertTrue(containsStringChunks(outputStream.toString(), chunks));
   }
 

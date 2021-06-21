@@ -89,5 +89,8 @@ Assumptions and limitations
 Design Notes
 --------
 This is a simple implementation of a search index. It uses a number of inverted indices in order to perform quick
-searches; the actual data is stored in another index where it can be referred by ID after the actual search is performed,
-just to display the data.
+searches; the actual data is stored in another index where it can be referred by ID after the actual search is
+performed, just to display the data.
+
+The configuration file allows the application to have significant flexibility in how the users want their data model to
+be used, as it allowed customisation of the ID field as well as the foreign key references.
