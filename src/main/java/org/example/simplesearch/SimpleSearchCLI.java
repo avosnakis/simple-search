@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
@@ -70,15 +71,20 @@ public class SimpleSearchCLI {
 
     // Main REPL loop.
     while (scanner.hasNext()) {
-      int res = scanner.nextInt();
-      if (res == SEARCH_CODE) {
-        performSearch(scanner, searchClient, mappings);
-      } else if (res == FIELDS_CODE) {
-        listFields(searchClient);
-      } else if (res == EXIT_CODE) {
-        printStream.println("Exiting simple search engine.");
-        return;
-      } else {
+      try {
+        String input = scanner.next();
+        int res = Integer.parseInt(input);
+        if (res == SEARCH_CODE) {
+          performSearch(scanner, searchClient, mappings);
+        } else if (res == FIELDS_CODE) {
+          listFields(searchClient);
+        } else if (res == EXIT_CODE) {
+          printStream.println("Exiting simple search engine.");
+          return;
+        } else {
+          printStream.println("Unknown command.");
+        }
+      } catch (NumberFormatException e) {
         printStream.println("Unknown command.");
       }
 
@@ -119,7 +125,7 @@ public class SimpleSearchCLI {
     startUserInput();
     String value = scanner.next();
 
-    printStream.printf("Searching %s, where %s is %s%n", field, field, value);
+    printStream.printf("Searching %s, where %s is %s%n", file, field, value);
     return new SearchRequest(file, field, value);
   }
 

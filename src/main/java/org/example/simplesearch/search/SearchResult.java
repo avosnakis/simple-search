@@ -1,8 +1,10 @@
 package org.example.simplesearch.search;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.PrintStream;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 
@@ -50,11 +52,20 @@ public class SearchResult {
     if (results.size() > 0) {
       String message = desc + " document" + (results.size() == 1 ? "" : "s") + ".";
       printStream.printf("%d %s%n", results.size(), message);
-      results.stream()
-          .map(JsonNode::toPrettyString)
-          .forEach(printStream::println);
+      results.forEach(node -> {
+        printDoc(node, printStream);
+        printStream.println();
+      });
     } else {
       printStream.printf("No %s documents.%n", desc);
+    }
+  }
+
+  private static void printDoc(JsonNode doc, PrintStream printStream) {
+    Iterator<String> fields = doc.fieldNames();
+    while (fields.hasNext()) {
+      String curr = fields.next();
+      printStream.printf("%-30.30s  %-40.40s%n", curr, doc.path(curr).asText());
     }
   }
 }
