@@ -66,6 +66,21 @@ class SimpleSearchCLITest {
     assertTrue(containsStringChunks(outputStream.toString(), chunks));
   }
 
+  @Test
+  void givenSubmittedDocs_thenRequestFieldsAndExits_displaysFields() throws Exception {
+    InputStream inputStream = new ByteArrayInputStream(
+        "2\n3".getBytes()
+    );
+
+    SimpleSearchCLI simpleSearchCLI = new SimpleSearchCLI(printStream, inputStream);
+    simpleSearchCLI.execute(
+        "src/test/resources/factory/single_good.json",
+        "src/test/resources/factory/TEST_CONFIG.json"
+    );
+
+    assertTrue(containsStringChunks(outputStream.toString(), "_id", "test"));
+  }
+
   private static String integrationFile(String file) {
     return JSON_DIR + File.separator + file;
   }

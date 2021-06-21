@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  * Command line interface for the search engine.
@@ -79,7 +80,13 @@ public class SimpleSearchCLI {
   }
 
   private void listFields(SearchClient searchClient) {
-
+    Map<String, Set<String>> fields = searchClient.searchableFields();
+    for (Map.Entry<String, Set<String>> entry: fields.entrySet()) {
+      printStream.printf("%s:%n", entry.getKey());
+      for (String field : entry.getValue()) {
+        printStream.printf("\t%s%n", field);
+      }
+    }
   }
 
   private void performSearch(Scanner scanner, SearchClient searchClient, KeyMappings mappings) {
