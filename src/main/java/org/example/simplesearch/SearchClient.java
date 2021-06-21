@@ -76,4 +76,16 @@ public class SearchClient {
 
     return relatedDocuments;
   }
+
+  /**
+   * @return The searchable fields in each index.
+   */
+  public Map<String, Set<String>> searchableFields() {
+    return indices.entrySet()
+        .stream()
+        .collect(Collectors.toMap(
+            Map.Entry::getKey,
+            e -> e.getValue().searchableFields()
+        ));
+  }
 }

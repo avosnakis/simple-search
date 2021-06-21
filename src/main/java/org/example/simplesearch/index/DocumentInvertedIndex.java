@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Inverted index which maintains a set of inverted indices for each field on a set of documents.
@@ -91,5 +92,12 @@ public class DocumentInvertedIndex {
     }
 
     return index.retrieveHits(value);
+  }
+
+  /**
+   * @return all searchable fields in this index.
+   */
+  Set<String> searchableFields() {
+    return indices.keySet();
   }
 }

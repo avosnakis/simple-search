@@ -3,8 +3,6 @@ package org.example.simplesearch;
 import org.example.simplesearch.index.IndexFactory;
 import org.example.simplesearch.index.InvalidDocumentFileException;
 import org.example.simplesearch.index.SearchIndex;
-import org.example.simplesearch.search.InvalidSearchSyntax;
-import org.example.simplesearch.search.SearchParser;
 import org.example.simplesearch.search.SearchRequest;
 import org.example.simplesearch.search.SearchResult;
 
@@ -13,7 +11,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -59,38 +59,47 @@ public class SimpleSearchCLI {
     KeyMappings mappings = fromConfigFile(args[args.length - 1]);
     SearchClient searchClient = createSearchClient(args, mappings);
 
-    Scanner sc = new Scanner(inputStream);
-    printStream.print(">>> ");
-    while (sc.hasNext()) {
-      String input = sc.next();
-      if (input.equals("exit")) {
-        break;
+    printStream.println("Welcome to the simple search engine.");
+    printStream.println("Type 1 to search, 2 to list fields that can be searched, or 3 to exit.");
+    printStream.println();
+    Scanner scanner = new Scanner(inputStream);
+    while (scanner.hasNext()) {
+      int res = scanner.nextInt();
+      if (res == 1) {
+        performSearch(scanner, searchClient, mappings);
+      } else if (res == 2) {
+        listFields(searchClient);
+      } else if (res == 3) {
+        printStream.println("Exiting simple search engine.");
+        return;
+      } else {
+        printStream.println("Unknown command.");
       }
-
-      printStream.println();
-      SearchParser parser = new SearchParser(input);
-      try {
-        SearchRequest request = parser.parse();
-        printQuery(request);
-
-        SearchResult result = searchClient.search(request, mappings.getIdField());
-        result.print(printStream);
-      } catch (InvalidSearchSyntax e) {
-        printStream.println(e.getMessage());
-      }
-
-      printStream.print(">>> ");
     }
-
-    printStream.println("Exiting simple search engine."); // This somehow never get printed.
   }
 
-  private void printQuery(SearchRequest searchRequest) {
-    printStream.printf("Searching %s: %s = %s%n",
-        searchRequest.getIndexName(),
-        searchRequest.getField(),
-        searchRequest.getQuery()
-    );
+  private void listFields(SearchClient searchClient) {
+
+  }
+
+  private void performSearch(Scanner scanner, SearchClient searchClient, KeyMappings mappings) {
+    SearchRequest request = enterRequest(scanner, Collections.emptyList());
+    SearchResult result = searchClient.search(request, mappings.getIdField());
+    result.print(printStream);
+  }
+
+  private SearchRequest enterRequest(Scanner scanner, List<String> files) {
+    printStream.println("Which file would you like to query?");
+    String file = scanner.next();
+
+    printStream.println("Which field would you like to query?");
+    String field = scanner.next();
+
+    printStream.println("What value would you like to search for?");
+    String value = scanner.next();
+
+    printStream.printf("Searching %s, where %s is %s%n", field, field, value);
+    return new SearchRequest(file, field, value);
   }
 
   private KeyMappings fromConfigFile(String configFilePath) throws IOException, InvalidConfigurationException {

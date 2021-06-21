@@ -28,7 +28,7 @@ class SimpleSearchCLITest {
   @Test
   void givenSubmittedDocsThenConfig_loadsSuccessfully() throws Exception {
     InputStream inputStream = new ByteArrayInputStream(
-        "organizations.\"_id\"=102".getBytes()
+        "1\norganizations\n_id\n102".getBytes()
     );
 
     SimpleSearchCLI simpleSearchCLI = new SimpleSearchCLI(printStream, inputStream);
@@ -40,7 +40,7 @@ class SimpleSearchCLITest {
   @Test
   void givenSubmittedAllDocsThenConfig_loadsSuccessfully() throws Exception {
     InputStream inputStream = new ByteArrayInputStream(
-        "organizations.\"_id\"=102".getBytes()
+        "1\norganizations\n_id\n102".getBytes()
     );
 
     SimpleSearchCLI simpleSearchCLI = new SimpleSearchCLI(printStream, inputStream);

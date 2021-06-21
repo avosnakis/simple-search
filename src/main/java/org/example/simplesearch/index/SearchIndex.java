@@ -40,4 +40,8 @@ public class SearchIndex {
   public String getName() {
     return name;
   }
+
+  public Set<String> searchableFields() {
+    return this.invertedIndex.searchableFields();
+  }
 }

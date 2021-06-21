@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
@@ -34,10 +35,12 @@ class SearchClientTest {
         singleton(mapper.createObjectNode().put("_id", 1).put("test", "TEST")),
         emptySet()
     ), result);
+
+    assertEquals(Map.of("organisation", Set.of("_id", "test")), client.searchableFields());
   }
 
   @Test
-  void givenIndexDoesNotExist_whenSearching_returnsNothing() throws InvalidDocumentFileException {
+  void givenIndexIsEmpty_whenSearching_returnsNothing() throws InvalidDocumentFileException {
     Map<String, SearchIndex> indices = new HashMap<>();
     indices.put("organisation", IndexFactory.createSearchIndex(new File(JSON_DIR, "empty.json"), "_id"));
 
@@ -45,6 +48,7 @@ class SearchClientTest {
 
     SearchResult result = client.search(new SearchRequest("users", "_id", "1"), "_id");
     assertEquals(new SearchResult(emptySet(), emptySet()), result);
+    assertEquals(Map.of("organisation", emptySet()), client.searchableFields());
   }
 
   @Test
@@ -57,11 +61,16 @@ class SearchClientTest {
 
     SearchClient client = new SearchClient(indices, keyMappings);
 
-    SearchResult result = client.search(new SearchRequest("single_good","_id", "1"), "_id");
+    SearchResult result = client.search(new SearchRequest("single_good", "_id", "1"), "_id");
     assertEquals(
         new SearchResult(
             singleton(mapper.createObjectNode().put("_id", 1).put("test", "TEST")),
             singleton(mapper.createObjectNode().put("_id", 1).put("single_good_id", 1))
         ), result);
+    assertEquals(
+        Map.of(
+            "single_good", Set.of("_id", "test"),
+            "test_fk", Set.of("_id", "single_good_id")
+        ), client.searchableFields());
   }
 }

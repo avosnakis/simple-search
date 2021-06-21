@@ -24,6 +24,7 @@ class DocumentInvertedIndexTest {
 
     Set<String> res = index.retrieveHits("test", "EXAMPLE");
     assertEquals(singleton("1"), res);
+    assertEquals(Set.of("test"), index.searchableFields());
   }
 
   @Test
@@ -41,6 +42,7 @@ class DocumentInvertedIndexTest {
 
     Set<String> res = index.retrieveHits("test", "EXAMPLE");
     assertEquals(Set.of("1", "2"), res);
+    assertEquals(Set.of("test"), index.searchableFields());
   }
 
   @Test
@@ -53,6 +55,7 @@ class DocumentInvertedIndexTest {
 
     Set<String> res = index.retrieveHits("test", "NOT_THE_VALUE");
     assertEquals(emptySet(), res);
+    assertEquals(Set.of("test"), index.searchableFields());
   }
 
   @Test
@@ -65,6 +68,7 @@ class DocumentInvertedIndexTest {
 
     Set<String> res = index.retrieveHits("not_a_real_field", "NOT_THE_VALUE");
     assertEquals(emptySet(), res);
+    assertEquals(Set.of("test"), index.searchableFields());
   }
 
   @Test
@@ -83,6 +87,7 @@ class DocumentInvertedIndexTest {
 
     Set<String> res2 = index.retrieveHits("test", "EXAMPLE_2");
     assertEquals(singleton("1"), res2);
+    assertEquals(Set.of("test"), index.searchableFields());
   }
 
   @Test
@@ -98,5 +103,6 @@ class DocumentInvertedIndexTest {
     // This is somewhat awkward to 'query', but an ObjectNode's string representation will look like this.
     Set<String> res = index.retrieveHits("test", "{\"nested_field\":\"nested_value\"}");
     assertEquals(emptySet(), res);
+    assertEquals(emptySet(), index.searchableFields());
   }
 }

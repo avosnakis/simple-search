@@ -27,6 +27,8 @@ class SearchIndexTest {
 
     Set<JsonNode> searchResult = searchIndex.findMatchingDocs("TEST_FIELD", "test");
     assertEquals(Set.of(node), searchResult);
+
+    assertEquals(Set.of("_id", "TEST_FIELD"), searchIndex.searchableFields());
   }
 
   @Test
@@ -48,6 +50,7 @@ class SearchIndexTest {
 
     Set<JsonNode> searchResult = searchIndex.findMatchingDocs("TEST_FIELD", "test");
     assertEquals(Set.of(firstNode, secondNode), searchResult);
+    assertEquals(Set.of("_id", "TEST_FIELD"), searchIndex.searchableFields());
   }
 
   @Test
@@ -70,5 +73,6 @@ class SearchIndexTest {
 
     Set<JsonNode> searchResult = searchIndex.findMatchingDocs("TEST_FIELD", "test");
     assertEquals(Set.of(firstNode), searchResult);
+    assertEquals(Set.of("_id", "TEST_FIELD"), searchIndex.searchableFields());
   }
 }
