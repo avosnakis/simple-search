@@ -2,7 +2,6 @@ package org.example.simplesearch.index;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.simplesearch.index.DocumentStore;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -19,7 +18,7 @@ class DocumentStoreTest {
         .put("_id", 1)
         .put("test", "test");
 
-    DocumentStore documentStore = new DocumentStore("TEST");
+    DocumentStore documentStore = new DocumentStore();
     documentStore.storeDocument("1", jsonNode);
 
     assertEquals(Optional.of(jsonNode), documentStore.retrieveDocument("1"));
@@ -32,7 +31,7 @@ class DocumentStoreTest {
         .put("_id", 1)
         .put("test", "test");
 
-    DocumentStore documentStore = new DocumentStore("TEST");
+    DocumentStore documentStore = new DocumentStore();
     documentStore.storeDocument("1", originalDoc);
 
     JsonNode newDoc = mapper.createObjectNode()

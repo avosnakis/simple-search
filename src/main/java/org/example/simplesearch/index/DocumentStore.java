@@ -11,12 +11,9 @@ import java.util.Optional;
  */
 public class DocumentStore {
 
-  private final String name;
-
   private final Map<String, JsonNode> store = new HashMap<>();
 
-  DocumentStore(String name) {
-    this.name = name;
+  DocumentStore() {
   }
 
   /**
